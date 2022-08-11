@@ -2,13 +2,14 @@ import { initializeApp } from 'firebase/app';
 import {
     getFirestore,
     collection,
-} from 'firebase/firestore';
+} from 'firebase/firestore'
+
 import {
     getAuth,
 } from 'firebase/auth';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyC-_XZ49lYASzrhQkR_ACFSxhy_w179Jns",
+    apiKey: process.env.REACT_APP_API_KEY,
     authDomain: "noteit-app-d3814.firebaseapp.com",
     projectId: "noteit-app-d3814",
     storageBucket: "noteit-app-d3814.appspot.com",
@@ -19,9 +20,9 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 
 //init service
- export const db = getFirestore();
- 
-const auth=getAuth();
+export const db = getFirestore();
+
+const auth = getAuth();
 //collection rel
 export const notesCollectionRef = collection(db, 'notes');
 
