@@ -5,38 +5,58 @@ import Paper from '@material-ui/core/Paper';
 import { Typography } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import NoteCard from '../components/noteCard'
-import { notesCollectionRef ,db} from '../firebase-config';
-import { deleteDoc,doc, getDocs } from 'firebase/firestore';
+import { notesCollectionRef, db, Auth } from '../firebase-config';
+import { arrayRemove, deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
 import Masonry from 'react-masonry-css';
+import {
+  onAuthStateChanged,
+} from 'firebase/auth';
 
 export default function Notes() {
 
+  const [uid, setUid] = useState();
   const [notes, setNotes] = useState([]);
-  useEffect(() => {
-    const getData = async () => {
-      const notesData = await getDocs(notesCollectionRef);
-      console.log(notesData);
-      const extractedData=notesData.docs.map((note) => (
-       ({ ...note.data(), id: note.id })
-      ))
-      console.log(extractedData)
-      setNotes(extractedData);
-      // setNotes(data);
+  // setTimeout(()=>{if(Auth){
+  //   setUid(Auth.currentUser.uid)}
+  // console.log(uid)},1000);
+
+
+  onAuthStateChanged(Auth, (user) => {
+  
+    if (user) {
+        setUid(user.uid);
+        }
     }
-    getData();
+  
+  )
 
-  }, []);
+  
+    useEffect(() => {
+      const getData = async () => {
+          const notesData = await getDoc(doc(db, 'users', uid));
 
-console.log(notes);
+          if (notesData.exists()) {
+            
+            setNotes(notesData.data().notess);
+          }
+
+      }
+      getData();
+
+    }, [uid,notes]);
+
+  
   const breakpoints = {
     default: 3,
     1100: 2,
     700: 1,
   }
-  const deleteNote = async (id) => {
-    const docRef=doc(db,'notes',id);
-    deleteDoc(docRef);
-    const newNotes = notes.filter((note) => note.id !== id);
+  const deleteNote = async (note) => {
+    console.log(note);
+    const docRef = doc(db, 'users', uid);
+     await updateDoc(docRef,{
+      notess:arrayRemove(note)})
+    const newNotes = notes.filter((noteo) => noteo!== note);
     setNotes(newNotes);
   }
   return (

@@ -5,8 +5,8 @@ import {
 } from 'firebase/firestore'
 
 import {
-    getAuth,
-} from 'firebase/auth';
+getAuth,
+} from 'firebase/auth'; 
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_API_KEY,
@@ -21,10 +21,12 @@ initializeApp(firebaseConfig);
 
 //init service
 export const db = getFirestore();
-
-const auth = getAuth();
+ export const Auth = getAuth();
 //collection rel
 export const notesCollectionRef = collection(db, 'notes');
+export const usersCollectionRef=collection(db,'users');
+
+
 
 //get collection data
 

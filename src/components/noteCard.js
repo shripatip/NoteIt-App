@@ -31,7 +31,7 @@ const styles = makeStyles({
 
 })
 const NoteCard = ({ note, deleteNote }) => {
-    console.log(note);
+   
     const classes = styles(note);
     return (
         <Card elevation={1} className={classes.test}>
@@ -41,7 +41,7 @@ const NoteCard = ({ note, deleteNote }) => {
                         {note &&note.catagory[0].toUpperCase()}
                     </Avatar>
                 }
-                action={<IconButton onClick={() => deleteNote(note.id)}>
+                action={<IconButton onClick={() => deleteNote(note)}>
                     <DeleteOutlined />
                 </IconButton>}
                 title={note.title}

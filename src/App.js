@@ -4,7 +4,9 @@ import Create from './pages/Create'
 import Layout from './components/Layout'
 import {createTheme,ThemeProvider} from "@material-ui/core"
 import  {purple } from '@material-ui/core/colors'
-import signUp from './components/signUp'
+import Login from './components/Login'
+import SignUp from './components/signUp'
+
 
 const theme=createTheme({
   palette:{
@@ -28,6 +30,8 @@ function App() {
     <Router>
       <Layout >
       <Routes>
+        <Route path="/signup" element={<SignUp/>}/>
+        <Route path='/login' element={<Login/>}/>
         <Route path="/" element={<Notes />} />
         <Route path="/create" element={<Create />} />
       </Routes>

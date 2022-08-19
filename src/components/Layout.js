@@ -1,12 +1,19 @@
-import React from 'react';
-import { makeStyles, Drawer, Typography, Box, ListItem, ListItemText, ListItemIcon, Avatar } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { makeStyles, Drawer, Typography, Box, ListItem, ListItemText, ListItemIcon, Avatar, capitalize } from '@material-ui/core';
 import { List } from '@material-ui/core';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import { format } from 'date-fns';
 import { AppBar, Toolbar } from '@material-ui/core'
 import { useLocation } from "react-router-dom";
 import profile from '../constant/mario-av.png'
+import { signOut } from 'firebase/auth';
+import {
+    onAuthStateChanged,
+} from 'firebase/auth';
+
+import { Auth } from '../firebase-config.js'
+import { red } from '@material-ui/core/colors'
 import { AddCircleOutlineOutlined, SubjectOutlined } from '@material-ui/icons';
 const drawerWidth = 240;
 
@@ -41,11 +48,18 @@ const styles = makeStyles((theme) => {
             width: `calc(100% - ${drawerWidth}px)`
         },
         toolbar: theme.mixins.toolbar,
-        date:{
-            flexGrow:'1',
+        date: {
+            flexGrow: '1',
         },
-        avatar:{
-            marginLeft:theme.spacing(2),
+        avatar: {
+            marginLeft: theme.spacing(2),
+        },
+        logout: {
+            color: red[500],
+            marginLeft: theme.spacing(2),
+        },
+        disapear: {
+            display: "none"
         }
     }
 });
@@ -56,7 +70,17 @@ const styles = makeStyles((theme) => {
 const Layout = ({ children }) => {
     const navigateo = useNavigate();
     const location = useLocation();
+    const [userName, setUserName] = useState('');
+
     const classes = styles();
+
+
+    useEffect(() => {
+        if (Auth.currentUser) {
+            setUserName(Auth.currentUser.displayName)
+        }
+    }
+        , [])
     const menuItem = [
         {
             name: "My Notes",
@@ -71,28 +95,59 @@ const Layout = ({ children }) => {
 
         }
     ]
+
+    const isAuth = () => {
+        if (location.pathname === '/login' || location.pathname === '/signup') {
+            return true;
+        }
+
+        else return false;
+    }
+
+
     return (
-        <div className={classes.outerMost}>
-            <AppBar className={classes.appBar}
+        <div className={classes.outerMost}
+        >
+            <AppBar className={`${classes.appBar} ${isAuth() ? classes.disapear : " "}`}
+
                 elevation={0}>
                 <Toolbar>
                     <Typography variant="body1" className={classes.date}>
                         Today is the {format(new Date(), 'do MMMM Y')}.
                     </Typography>
-                    <Typography>
-                        Mario
-                    </Typography>
-                    <Avatar className={classes.avatar} src={profile}/>
+
+                   
+                    {Auth.currentUser && <Typography >{userName}</Typography>}
+
+                    <Avatar className={classes.avatar} src={profile} />
+                    <Button
+                        className={classes.logout}
+                        variant='outlined'
+                        size="small"
+                        onClick={() => {
+                            signOut(Auth).then(() => {
+                                console.log('signed out')
+                            }).catch((err) => {
+                                console.log(err.message);
+                            })
+                            navigateo('/login')
+                        }}
+
+                    >
+                        LOGOUT
+                    </Button>
                 </Toolbar>
             </AppBar>
             <Drawer anchor="left"
+
                 variant="permanent"
                 classes={{ paper: classes.drawerPaper }}
-                className={classes.drawer}>
+                className={`${classes.drawer}  ${isAuth() ? classes.disapear : " "}`}
+            >
                 <Typography className={classes.title} variant="h5">Ninja Notes</Typography>
                 <List>
                     {menuItem.map((item) => (
-                        <Button className={classes.button} onClick={() => navigateo(item.path)}>
+                        <Button className={classes.button} key={item.name} onClick={() => navigateo(item.path)}>
                             <ListItem key={item.name}
                                 className={location.pathname === item.path ? classes.active : ''}>
                                 <ListItemIcon>{item.icon}</ListItemIcon>
@@ -106,7 +161,7 @@ const Layout = ({ children }) => {
 
 
             <div className={classes.page}>
-                <div className={classes.toolbar}></div>
+                <div className={`${classes.toolbar}  ${isAuth() ? classes.disapear : " "}`}></div>
                 {children}
             </div>
 
