@@ -1,4 +1,4 @@
-The noteIt Web Application is a utility and productivity tools for its users
+ ## The noteIt Web Application is a utility and productivity tools for its users
 
 In NoteIt App a user can create account and and can make personalized notes for itself
 
@@ -7,11 +7,11 @@ In NoteIt App a user can create account and and can make personalized notes for 
 ![img3](https://user-images.githubusercontent.com/55550358/185771350-deb90aa3-4a33-4909-a9fa-8a551d678941.png)
 ![img2](https://user-images.githubusercontent.com/55550358/185771352-10935594-d1fb-497d-8839-03e6b355d64a.png)
 
-###`user Benifits:-`
+### `user Benifits:-`
 
 ->user can create account using mail,can create his personalized notes,and can access them anytime by signing into his account
 
-->user can create notes of four diffrent catagery 
+## ->user can create notes of four diffrent catagery 
 
 1-money
 
@@ -23,7 +23,7 @@ In NoteIt App a user can create account and and can make personalized notes for 
 
 ->user has a personalized Nickname 
 
-###`Key features of the app are:-`
+### `Key features of the app are:-`
 
 
 ->ReactJS is used.
