@@ -3,12 +3,14 @@ import { Container, Button, Box, Typography, TextField, } from '@material-ui/cor
 import { makeStyles } from '@material-ui/styles';
 import { FormControl, RadioGroup, FormControlLabel } from '@material-ui/core';
 import { pink } from '@material-ui/core/colors';
-import { signInWithEmailAndPassword ,
-onAuthStateChanged} from 'firebase/auth';
+import {
+    signInWithEmailAndPassword,
+    onAuthStateChanged
+} from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom'
 import { Auth } from '../firebase-config.js';
 import Logo from '../constant/OIP.jpg'
-
+import LoginIcon from '@material-ui/icons/LabelOff';
 const styles = makeStyles({
     outer: {
         display: 'flex',
@@ -38,7 +40,8 @@ const styles = makeStyles({
 
     },
     title: {
-        color: pink[500]
+        color: pink[500],
+        marginBottom: "20px",
     },
     textField: {
         marginBottom: "20px",
@@ -51,22 +54,22 @@ const styles = makeStyles({
 const Login = () => {
     const classes = styles();
     const navigate = useNavigate();
-    const [emailo, setEmail] = useState('');
-    const [passwordo, setPassword] = useState('');
-    const loginOnSubmit= (e) => {
+    const [emailo, setEmail] = useState('realtest@gmail.com');
+    const [passwordo, setPassword] = useState('1234567');
+    const loginOnSubmit = (e) => {
         e.preventDefault();
-        console.log("hii");
+
         signInWithEmailAndPassword(Auth, emailo, passwordo).then((cred) => {
-            console.log('loged in person', cred);
-        }).catch((error) => {
-            console.log(error.message);
-        })
+
+            navigate('/notes');
+        }).catch(err => { alert(err.code) });
     }
-    onAuthStateChanged(Auth,(user)=>{
-if(user){
-    navigate('/');
-}})
-    
+    onAuthStateChanged(Auth, (user) => {
+        if (user) {
+
+        }
+    })
+
     return (
         <div className={classes.outer}>
             <Box
@@ -77,11 +80,11 @@ if(user){
             <form onSubmit={loginOnSubmit} noValidate autoComplete='off'>
                 <Box className={classes.box} padding={3}>
                     <Typography variant="h3"
-                        className={classes.title} gutterBottom>Login</Typography>
+                        className={classes.title} >Login</Typography>
 
                     <TextField
                         className={classes.textField}
-                        gutterBottom
+                        gutterbottom='true'
                         variant='outlined'
                         value={emailo}
                         onChange={(e) => setEmail(e.target.value)}
@@ -92,7 +95,7 @@ if(user){
                     />
                     <TextField
                         className={classes.textField}
-                        gutterBottom
+                        gutterbottom='true'
                         variant='outlined'
                         label='Password'
                         value={passwordo}
@@ -105,13 +108,14 @@ if(user){
                         variant="contained"
                         textDecoration="none"
                         color='secondary'
-                        type="submit"  
+                        type="submit"
+                        endIcon={<LoginIcon />}
                     >
                         Login
                     </Button>
-                    <Box>
-                        <Typography variant='body1' >Crete an Account..      <span><Link
-                            style={{ textDecoration: 'none' }} to='/signup'>SIGN UP</Link></span> </Typography>
+                    <Box mt={1}>
+                        <Typography variant='body1' >Crete an Account ...<span><Link
+                            style={{ textDecoration: 'none' }} to='/signup'>   SIGN UP</Link></span> </Typography>
                     </Box>
                 </Box>
             </form>

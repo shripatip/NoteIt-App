@@ -14,7 +14,7 @@ import {
 
 import { Auth } from '../firebase-config.js'
 import { red } from '@material-ui/core/colors'
-import { AddCircleOutlineOutlined, SubjectOutlined } from '@material-ui/icons';
+import { AddCircleOutlineOutlined, SubjectOutlined,DoubleArrowOutlined } from '@material-ui/icons';
 const drawerWidth = 240;
 
 //arguments can be passed inside makestyles function
@@ -75,17 +75,17 @@ const Layout = ({ children }) => {
     const classes = styles();
 
 
-    useEffect(() => {
-        if (Auth.currentUser) {
-            setUserName(Auth.currentUser.displayName)
-        }
+   onAuthStateChanged(Auth,(user)=>{
+    if(user){
+        
+        setUserName(user.displayName);
     }
-        , [])
+   })
     const menuItem = [
         {
             name: "My Notes",
             icon: <SubjectOutlined color="secondary" />,
-            path: '/',
+            path: '/notes',
 
         },
         {
@@ -97,7 +97,7 @@ const Layout = ({ children }) => {
     ]
 
     const isAuth = () => {
-        if (location.pathname === '/login' || location.pathname === '/signup') {
+        if (location.pathname === '/' || location.pathname === '/signup') {
             return true;
         }
 
@@ -123,6 +123,7 @@ const Layout = ({ children }) => {
                     <Button
                         className={classes.logout}
                         variant='outlined'
+                        endIcon={<DoubleArrowOutlined/>}
                         size="small"
                         onClick={() => {
                             signOut(Auth).then(() => {
@@ -130,7 +131,7 @@ const Layout = ({ children }) => {
                             }).catch((err) => {
                                 console.log(err.message);
                             })
-                            navigateo('/login')
+                            navigateo('/signup')
                         }}
 
                     >
@@ -144,7 +145,7 @@ const Layout = ({ children }) => {
                 classes={{ paper: classes.drawerPaper }}
                 className={`${classes.drawer}  ${isAuth() ? classes.disapear : " "}`}
             >
-                <Typography className={classes.title} variant="h5">Ninja Notes</Typography>
+                <Typography className={classes.title} variant="h5">NoteIt App</Typography>
                 <List>
                     {menuItem.map((item) => (
                         <Button className={classes.button} key={item.name} onClick={() => navigateo(item.path)}>

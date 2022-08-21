@@ -6,7 +6,7 @@ import { Typography } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import NoteCard from '../components/noteCard'
 import { notesCollectionRef, db, Auth } from '../firebase-config';
-import { arrayRemove, deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { arrayRemove, deleteDoc, doc, getDoc, setIndexConfiguration, updateDoc } from 'firebase/firestore';
 import Masonry from 'react-masonry-css';
 import {
   onAuthStateChanged,
@@ -22,24 +22,22 @@ export default function Notes() {
 
 
   onAuthStateChanged(Auth, (user) => {
-  
     if (user) {
         setUid(user.uid);
         }
     }
-  
   )
 
   
     useEffect(() => {
       const getData = async () => {
+        if(uid){
           const notesData = await getDoc(doc(db, 'users', uid));
-
+        
           if (notesData.exists()) {
-            
             setNotes(notesData.data().notess);
           }
-
+        }
       }
       getData();
 
@@ -67,7 +65,7 @@ export default function Notes() {
         columnClassName="my-masonry-grid_column"
       >
         {notes.map((note) => (
-          <div key={note.id} >
+          <div key={notes.indexOf(note)} >
             <NoteCard note={note} deleteNote={deleteNote} />
           </div>
         ))}

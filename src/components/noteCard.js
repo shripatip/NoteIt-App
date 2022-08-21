@@ -31,14 +31,14 @@ const styles = makeStyles({
 
 })
 const NoteCard = ({ note, deleteNote }) => {
-   
+
     const classes = styles(note);
     return (
         <Card elevation={1} className={classes.test}>
             <CardHeader
                 avatar={
                     <Avatar className={classes.avatar}>
-                        {note &&note.catagory[0].toUpperCase()}
+                        {note && note.catagory[0].toUpperCase()}
                     </Avatar>
                 }
                 action={<IconButton onClick={() => deleteNote(note)}>

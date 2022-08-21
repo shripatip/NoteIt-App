@@ -61,12 +61,13 @@ export default function Create() {
           details: details,
           catagory: catagory,
         }
-        console.log(node);
+        
 const userSpecificRef=doc(db,'users',user.uid)
-console.log(user.uid);
+
 await updateDoc(userSpecificRef,{
   notess:arrayUnion(node)
 })
+navigate('/notes');
         
 
 

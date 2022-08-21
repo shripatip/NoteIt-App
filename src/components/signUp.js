@@ -13,6 +13,7 @@ import {
 } from 'firebase/auth';
 import { Auth } from '../firebase-config.js'
 import { doc, setDoc, Timestamp } from "firebase/firestore";
+import RegisterIcon from '@material-ui/icons/AddBox';
 const styles = makeStyles({
   outer: {
     display: 'flex',
@@ -38,7 +39,8 @@ const styles = makeStyles({
     width: '330px',
   },
   title: {
-    color: pink[500]
+    color: pink[500],
+    marginBottom: "20px",
   },
   textField: {
     marginBottom: "20px",
@@ -54,7 +56,7 @@ const SignUp = () => {
   const classes = styles();
 
 
-  const createUser = async (uid,nodeo) => {
+  const createUser = async (uid, nodeo) => {
     console.log(Uid);
     await setDoc(doc(db, 'users', uid), nodeo)
     navigate('/create');
@@ -69,28 +71,26 @@ const SignUp = () => {
         notess: [],
         email: cred.user.email
       }
-      updateProfile(Auth.currentUser,{displayName:name}).then(()=>{console.log('name added')})
-      createUser(cred.user.uid,nodeo);
-    })
-
-
+      updateProfile(Auth.currentUser, { displayName: name }).then(() => { console.log('name added') })
+      createUser(cred.user.uid, nodeo);
+    }).catch(err => { alert(err.code) });
   }
 
-  
+
 
   // onAuthStateChanged(Auth, (user) => {
   //   console.log(user.uid);
   //   if (user) {
-      // const nodeo = {
-      //   notess: [],
-      //   email: user.email,
-      // }
+  // const nodeo = {
+  //   notess: [],
+  //   email: user.email,
+  // }
   //     setUid(user.uid);
   //     // console.log(Uid);
   //     
   //     // navigate('/create');
   //   }
-  
+
 
   return (
     <div className={classes.outer}>
@@ -104,21 +104,21 @@ const SignUp = () => {
         <Box className={classes.box} padding={3}>
 
           <Typography variant="h3"
-            className={classes.title} gutterBottom>Sign Up</Typography>
+            className={classes.title} >Sign Up</Typography>
           <TextField
             className={classes.textField}
             value={name}
             onChange={(e) => setName(e.target.value)}
-            gutterBottom
-            label="Name"
+            gutterbottom='true'
+            label="NickName"
             textDecoration="none"
             color='secondary'
             variant='outlined'
-            placeholder='name'
+            placeholder='nickName'
           />
           <TextField
             className={classes.textField}
-            gutterBottom
+            gutterbottom='true'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             variant='outlined'
@@ -129,7 +129,7 @@ const SignUp = () => {
           />
           <TextField
             className={classes.textField}
-            gutterBottom
+            gutterbottom='true'
             variant='outlined'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -143,12 +143,16 @@ const SignUp = () => {
             textDecoration="none"
             color='secondary'
             type="submit"
+            endIcon={<RegisterIcon />}
           >
             Register
           </Button>
-          <Box>
-            <Typography variant='body1' >Already have an account?      <span><Link
-              style={{ textDecoration: 'none' }} to='/login'>LOGIN</Link></span> </Typography>
+          <Box mt={1}>
+            <Typography variant='body1' >Already have an account? ...     <span><Link
+              style={{
+                textDecoration: 'none',
+              }}
+              to='/'>LOGIN</Link></span> </Typography>
 
           </Box>
         </Box>
